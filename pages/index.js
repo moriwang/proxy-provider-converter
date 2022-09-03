@@ -155,6 +155,18 @@ ${urlHost || "egroup"} = select, policy-path=${convertedUrl}
         )}
         <div className="w-full text-gray-900 mt-14">
           <h3 className="text-lg md:text-xl font-bold">
+            筛选服务器地区
+          </h3>
+          <p className="mt-2">
+            支持 HK,SG,TW,KR,JP,US 以 query 查询。
+           
+          </p>
+          <p className="mt-2">
+            示例：{`${convertedUrl}&c=HK`}
+          </p>
+        </div>
+        <div className="w-full text-gray-900 mt-14">
+          <h3 className="text-lg md:text-xl font-bold">
             怎么自己部署转换工具？
           </h3>
           <p className="mt-2">

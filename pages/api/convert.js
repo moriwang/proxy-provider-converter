@@ -2,8 +2,7 @@ const YAML = require("yaml");
 const axios = require("axios");
 
 module.exports = async (req, res) => {
-  const url = req.query.url;
-  const target = req.query.target;
+  const { url, target, c } = req.query || {}
   console.log(`query: ${JSON.stringify(req.query)}`);
   if (url === undefined) {
     res.status(400).send("Missing parameter: url");
@@ -114,7 +113,21 @@ module.exports = async (req, res) => {
     const proxies = surgeProxies.filter((p) => p !== undefined);
     res.status(200).send(proxies.join("\n"));
   } else {
-    const response = YAML.stringify({ proxies: config.proxies });
-    res.status(200).send(response);
+    let proxies = config.proxies
+    if (c) {
+      let candicateLocation = []
+      c.includes('HK') && candicateLocation.push('香港')
+      c.includes('SG') && candicateLocation.push('新加坡')
+      c.includes('TW') && candicateLocation.push('台湾')
+      c.includes('KR') && candicateLocation.push('韩国')
+      c.includes('JP') && candicateLocation.push('日本')
+      c.includes('US') && candicateLocation.push('美国')
+      proxies = config.proxies.filter((item) => item.name.includes(candicateLocation[0]))
+    }
+    const response = YAML.stringify({ proxies });
+    res.writeHead(200, {
+      "content-type": 'text/yaml;charset=utf8'
+    })
+    res.end(response)
   }
 };
